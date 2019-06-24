@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bms.Data;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,12 @@ namespace Bms.Api.Controllers
     [ApiController]
     public class BusinessesController : ControllerBase
     {
+        private readonly BmsDbContext db;
+        public BusinessesController(BmsDbContext db)
+        {
+            this.db = db;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()

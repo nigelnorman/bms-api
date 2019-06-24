@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Bms.Api.Services.MapperConfigs;
 
 namespace Bms.Api
 {
@@ -34,7 +36,9 @@ namespace Bms.Api
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+#pragma warning disable CS0618 // Type or member is obsolete
+            services.AddAutoMapper();
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

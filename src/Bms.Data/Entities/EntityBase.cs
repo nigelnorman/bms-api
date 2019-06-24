@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Bms.Data.Entities
 {
+    // this allows entities to be configured to use other types for PKs, like guids
     public abstract class EntityBase<TKey>
     {
         [Key, Column(Order = 0)]

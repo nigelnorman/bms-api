@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Bms.Api.ViewModels;
+using Bms.Data;
+using Bms.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,36 +15,83 @@ namespace Bms.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        // GET api/values
+        private readonly BmsDbContext db;
+        private readonly IMapper mapper;
+        public UsersController(BmsDbContext db, IMapper mapper)
+        {
+            this.db = db;
+            this.mapper = mapper;
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await this.db.Users.Select(u => this.mapper.Map<UserViewModel>(u)).ToListAsync();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<UserViewModel>> Get(int id)
         {
-            return "value";
+            var user = await this.db.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                throw new Exception("User could not be found.");
+            }
+
+            return this.mapper.Map<UserViewModel>(user);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] UserViewModel userVm)
         {
+            this.db.Users.Add(new User()
+            {
+                FirstName = userVm.FirstName,
+                LastName = userVm.LastName,
+                Active = userVm.Active
+            });
+
+            await this.db.SaveChangesAsync();
+
+            return this.Ok();
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<UserViewModel>> Put(int id, [FromBody] UserViewModel userVm)
         {
+            var user = await this.db.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                throw new Exception("User could not be found.");
+            }
+
+            this.db.Entry(user).CurrentValues.SetValues(userVm);
+
+            await this.db.SaveChangesAsync();
+
+            return this.mapper.Map<UserViewModel>(await this.db.Users.SingleAsync(u => u.Id == id));
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var user = await this.db.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                throw new Exception("User could not be found.");
+            }
+
+            this.db.Users.Remove(user);
+
+            await this.db.SaveChangesAsync();
+
+            return this.Ok();
+
         }
 
     }
