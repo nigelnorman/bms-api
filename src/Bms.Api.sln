@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.705
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bms.Api", "Bms.Api\Bms.Api.csproj", "{45474A44-EBA9-4CAF-9B92-86F8193DA0FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bms.Data", "Bms.Data\Bms.Data.csproj", "{D2B14FFA-5FFA-46AC-95B5-0FAF1ABB0396}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45474A44-EBA9-4CAF-9B92-86F8193DA0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45474A44-EBA9-4CAF-9B92-86F8193DA0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45474A44-EBA9-4CAF-9B92-86F8193DA0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45474A44-EBA9-4CAF-9B92-86F8193DA0FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B14FFA-5FFA-46AC-95B5-0FAF1ABB0396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B14FFA-5FFA-46AC-95B5-0FAF1ABB0396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B14FFA-5FFA-46AC-95B5-0FAF1ABB0396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B14FFA-5FFA-46AC-95B5-0FAF1ABB0396}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D3EB5E3-8221-42FD-B332-F2BCE700ED9B}
+	EndGlobalSection
+EndGlobal
