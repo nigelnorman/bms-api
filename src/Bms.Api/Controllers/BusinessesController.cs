@@ -1,5 +1,9 @@
-﻿using Bms.Data;
+﻿using AutoMapper;
+using Bms.Api.ViewModels;
+using Bms.Data;
+using Bms.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,41 +16,80 @@ namespace Bms.Api.Controllers
     public class BusinessesController : ControllerBase
     {
         private readonly BmsDbContext db;
-        public BusinessesController(BmsDbContext db)
+        private readonly IMapper mapper;
+        public BusinessesController(BmsDbContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
 
-        // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<BusinessViewModel>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await this.db.Businesses.Select(b => this.mapper.Map<BusinessViewModel>(b)).ToListAsync();
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(int id)
+        public async Task<ActionResult<BusinessViewModel>> Get(int id)
         {
-            return await Task.FromResult("value");
+            var business = await this.db.Businesses.SingleOrDefaultAsync(b => b.Id == id);
+
+            if (business == null)
+            {
+                throw new Exception("Business could not be found.");
+            }
+
+            return this.mapper.Map<BusinessViewModel>(business);
         }
 
-        // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] BusinessViewModel businessVm)
         {
+            this.db.Businesses.Add(new Business()
+            {
+                Name = businessVm.Name,
+                DateFounded = businessVm.DateFounded,
+            });
+
+            await this.db.SaveChangesAsync();
+
+            return this.Ok();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<BusinessViewModel>> Put(int id, [FromBody] BusinessViewModel businessVm)
         {
+            var business = await this.db.Businesses.SingleOrDefaultAsync(b => b.Id == id);
+
+            if (business == null)
+            {
+                throw new Exception("Business could not be found.");
+            }
+
+            this.db.Entry(business).CurrentValues.SetValues(businessVm);
+
+            await this.db.SaveChangesAsync();
+
+            return this.mapper.Map<BusinessViewModel>(await this.db.Businesses.SingleAsync(b => b.Id == id));
+
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var business = await this.db.Businesses.SingleOrDefaultAsync(b => b.Id == id);
+
+            if (business == null)
+            {
+                throw new Exception("Business could not be found.");
+            }
+
+            this.db.Businesses.Remove(business);
+
+            await this.db.SaveChangesAsync();
+
+            return this.Ok();
+
         }
 
     }

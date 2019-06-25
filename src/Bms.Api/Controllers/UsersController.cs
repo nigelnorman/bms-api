@@ -57,7 +57,6 @@ namespace Bms.Api.Controllers
             return this.Ok();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
         public async Task<ActionResult<UserViewModel>> Put(int id, [FromBody] UserViewModel userVm)
         {
@@ -75,7 +74,6 @@ namespace Bms.Api.Controllers
             return this.mapper.Map<UserViewModel>(await this.db.Users.SingleAsync(u => u.Id == id));
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
