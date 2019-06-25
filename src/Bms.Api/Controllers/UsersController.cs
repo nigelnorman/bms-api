@@ -30,7 +30,7 @@ namespace Bms.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserViewModel>> Get(int id)
+        public async Task<ActionResult<UserViewModel>> GetById(int id)
         {
             var user = await this.db.Users.SingleOrDefaultAsync(u => u.Id == id);
 
