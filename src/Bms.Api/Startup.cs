@@ -40,7 +40,7 @@ namespace Bms.Api
             services.AddDbContext<BmsDbContext>(options =>
             {
                 var connection = this.Configuration.GetConnectionString(nameof(BmsDbContext));
-                //options.useSqlServer(connection, opts => opts.MigrationsAssembly("PropLogix.Mosaic.Data"));
+                //options.useSqlServer(connection, opts => opts.MigrationsAssembly(""));
                 //this.Logger.LogDebug("{@SqlOptions}", options);
             });
 
@@ -122,8 +122,6 @@ namespace Bms.Api
 
                 options.DescribeAllEnumsAsStrings();
                 options.UseReferencedDefinitionsForEnums();
-
-                //options.IncludeXmlComments(MosaicSwagger.XmlCommentsFilePath());
 
             });
 
