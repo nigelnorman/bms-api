@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using static Bms.Api.Core.BmsSwagger;
+using Bms.Data.Entities;
+using Bms.Api.ViewModels;
 
 namespace Bms.Api
 {
@@ -57,7 +59,11 @@ namespace Bms.Api
             AddSwagger(services);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-            services.AddAutoMapper();
+            services.AddAutoMapper(config => 
+            {
+                config.CreateMap<User, UserViewModel>()
+                    .ForMember(dest => dest.Active, opts => opts.Ignore());
+            });
 #pragma warning restore CS0618 // Type or member is obsolete
         }
 

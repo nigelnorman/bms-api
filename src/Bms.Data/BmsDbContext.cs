@@ -24,7 +24,7 @@ namespace Bms.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=localhost;database=bms-dev;user=root;password=");
+            optionsBuilder.UseMySQL("server=localhost;database=bms-dev;user=bms-dev;password=devpassword");
             base.OnConfiguring(optionsBuilder);
         }
 

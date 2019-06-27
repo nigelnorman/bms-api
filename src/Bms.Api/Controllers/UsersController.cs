@@ -24,9 +24,11 @@ namespace Bms.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
+        public async Task<IEnumerable<UserViewModel>> Get()
         {
-            return await this.db.Users.Select(u => this.mapper.Map<UserViewModel>(u)).ToListAsync();
+            var users = await this.db.Users.ToListAsync();
+
+            return users.Select(u => this.mapper.Map<UserViewModel>(u));
         }
 
         [HttpGet("{id}")]
