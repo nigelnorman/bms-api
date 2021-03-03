@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Bms.Data.Entities
+namespace Sms.Data.Entities
 {
     // this allows entities to be configured to use other types for PKs, like guids
     public abstract class EntityBase<TKey>
