@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Bms.Api.Core
+namespace Sms.Api.Core
 {
-    public class BmsSwagger
+    public class SmsSwagger
     {
         public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         {
@@ -31,13 +33,13 @@ namespace Bms.Api.Core
                 }
             }
 
-            private static Info CreateInfoForApiVersion(ApiVersionDescription description)
+            private static OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
             {
-                var info = new Info
+                var info = new OpenApiInfo
                 {
-                    Title = "BMS",
-                    Contact = new Contact { Name = "Nigel Norman", Email = "iam.nigelnorman@gmail.com" },
-                    Description = "BMS Application Programming Interface. Don't sue me, Oracle.",
+                    Title = "SMS API",
+                    Contact = new OpenApiContact { Name = "Nigel Norman", Email = "iam.nigelnorman@gmail.com" },
+                    Description = "SMS Application Programming Interface. Don't sue me, Oracle.",
                     Version = description.ApiVersion.ToString()
                 };
 
@@ -50,7 +52,7 @@ namespace Bms.Api.Core
             }
         }
 
-        internal class SwaggerDefaultValues : IOperationFilter
+        internal class SwaggerDefaultValues : Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter
         {
             public void Apply(Operation operation, OperationFilterContext context)
             {
@@ -88,29 +90,34 @@ namespace Bms.Api.Core
                 */
                 var apiDescription = context.ApiDescription;
 
-                operation.Deprecated = apiDescription.IsDeprecated();
+                operation.deprecated = apiDescription.IsDeprecated();
 
-                if (operation.Parameters == null)
+                if (operation.parameters == null)
                 {
                     return;
                 }
 
-                foreach (var parameter in operation.Parameters.OfType<NonBodyParameter>())
-                {
-                    var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
+                //foreach (var parameter in operation.parameters.OfType<NonBodyParameter>())
+                //{
+                //    var description = apiDescription.ParameterDescriptions.First(p => p.Name == parameter.Name);
 
-                    if (parameter.Description == null)
-                    {
-                        parameter.Description = description.ModelMetadata?.Description;
-                    }
+                //    if (parameter.Description == null)
+                //    {
+                //        parameter.Description = description.ModelMetadata?.Description;
+                //    }
 
-                    if (parameter.Default == null)
-                    {
-                        parameter.Default = description.DefaultValue;
-                    }
+                //    if (parameter.Default == null)
+                //    {
+                //        parameter.Default = description.DefaultValue;
+                //    }
 
-                    parameter.Required |= description.IsRequired;
-                }
+                //    parameter.Required |= description.IsRequired;
+                //}
+            }
+
+            public void Apply(OpenApiOperation operation, OperationFilterContext context)
+            {
+                throw new NotImplementedException();
             }
         }
 
