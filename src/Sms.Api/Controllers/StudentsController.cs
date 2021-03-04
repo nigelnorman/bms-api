@@ -16,12 +16,10 @@ namespace Sms.Api.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly SmsDbContext db;
         private readonly IMapper mapper;
         private readonly StudentsService studentsService;
-        public StudentsController(SmsDbContext db, IMapper mapper, StudentsService studentsService)
+        public StudentsController(IMapper mapper, StudentsService studentsService)
         {
-            this.db = db;
             this.mapper = mapper;
             this.studentsService = studentsService;
         }
@@ -29,18 +27,32 @@ namespace Sms.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StudentViewModel>>> Get()
         {
-            return (await this.studentsService.GetAll())
-                .ToList()
-                .Select(u => this.mapper.Map<StudentViewModel>(u))
-                .ToList();
+            try
+            {
+                return (await this.studentsService.GetAll())
+                    .ToList()
+                    .Select(u => this.mapper.Map<StudentViewModel>(u))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<StudentViewModel>> GetById(int id)
         {
-            var student = await this.studentsService.GetById(id);
+            try
+            {
+                var student = await this.studentsService.GetById(id);
 
-            return this.mapper.Map<StudentViewModel>(student);
+                return this.mapper.Map<StudentViewModel>(student);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -80,10 +92,16 @@ namespace Sms.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await this.studentsService.RemoveExisting(id);
+            try
+            {
+                await this.studentsService.RemoveExisting(id);
 
-            return this.Ok();
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
-
     }
 }
